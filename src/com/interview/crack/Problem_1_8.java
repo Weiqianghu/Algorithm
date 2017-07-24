@@ -1,62 +1,51 @@
 package com.interview.crack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by weiqianghu on 17-7-24.
  */
 public class Problem_1_8 {
     public static void main(String[] args) {
-        int[][] matrix = {
-                {1, 4, 0},
-                {2, 5, 0},
-                {8, 5, 9}
-        };
-        printMatrix(matrix);
-        printMatrix(convert(matrix));
+        System.out.println(isRotate("abc", "abc"));
+        System.out.println(isRotate("abc", "bca"));
+        System.out.println(isRotate("abcd", "abcs"));
     }
 
-    private static void printMatrix(int[][] matrix) {
-        if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
-            return;
-        }
-        for (int[] row : matrix) {
-            for (int i : row) {
-                System.out.print(i + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
+    private static boolean isRotate(String str1, String str2) {
+        return str1 == null && str2 == null ||
+                !(str1 == null || str2 == null) &&
+                        str1.length() == str2.length() &&
+                        isSubstring(str1 + str1, str2);
     }
 
-    private static int[][] convert(int[][] matrix) {
-        if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
-            return matrix;
+    private static boolean isSubstring(String str1, String str2) {
+        if (str1 == null && str2 == null) {
+            return true;
+        }
+        if (str1 == null || str2 == null) {
+            return false;
         }
 
-        int rows = matrix.length;
-        int columns = matrix[0].length;
-        List<Integer> rowList = new ArrayList<>();
-        List<Integer> columnList = new ArrayList<>();
+        if (str1.length() < str2.length()) {
+            return false;
+        }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                if (matrix[i][j] == 0) {
-                    rowList.add(i);
-                    columnList.add(j);
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+
+        int i, j;
+        for (i = 0; i < chars1.length; i++) {
+            if (chars1[i] == chars2[0]) {
+                for (j = 0; j < chars2.length && i + j < chars1.length; j++) {
+                    if (chars1[i + j] != chars2[j]) {
+                        break;
+                    }
+                }
+                if (j == chars2.length) {
+                    return true;
                 }
             }
         }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                if (rowList.contains(i) || columnList.contains(j)) {
-                    matrix[i][j] = 0;
-                }
-            }
-        }
-
-        return matrix;
+        return false;
     }
 }
